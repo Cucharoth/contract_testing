@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS project_contract_testing;
+CREATE DATABASE project_contract_testing;
 
 -- SELECT the database
 \c project_contract_testing;
