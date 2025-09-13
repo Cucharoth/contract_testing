@@ -52,4 +52,4 @@ pushd ./insurances > /dev/null
 docker compose up --build -d
 popd > /dev/null
 
-echo "All stacks
+echo "All stacks started successfully."
