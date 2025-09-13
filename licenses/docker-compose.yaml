@@ -23,8 +23,8 @@ services:
       - project-contract-testing-network
 
   backend-contract-testing:
-    hostname: backend.contract_testing.local
-    container_name: backend.contract_testing.local
+    hostname: backend.licenses.contract_testing.local
+    container_name: backend.licenses.contract_testing.local
     build:
       context: .
       dockerfile: build/Dockerfile
@@ -38,7 +38,7 @@ services:
       JWT_SECRET: 'secreto'
       APP_ENV: staging
     ports:
-      - '32000:3000'
+      - '32001:3000'
     networks:
       - project-contract-testing-network
 
