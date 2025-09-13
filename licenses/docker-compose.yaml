@@ -18,6 +18,7 @@ services:
       - '31000:5432'
     volumes:
       - db-contract-testing:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - project-contract-testing-network
 
