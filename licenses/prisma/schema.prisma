@@ -18,19 +18,22 @@ model Patient {
   id        String    @id @default(uuid())
   name      String
   lastname  String
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   licenses  License[]
+
+  @@map("patient")
 }
 
 model Doctor {
   id        String    @id @default(uuid())
   name      String
   lastname  String
-  createdAt DateTime  @default(now()) @map("created_at") 
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   licenses  License[]
+
+  @@map("doctor")
 }
 
 enum LicenseStatus {
@@ -49,9 +52,12 @@ model License {
   startDate DateTime  @map("start_date")
   days      Int
   status    LicenseStatus @default(issued)
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)  
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
 
   patient   Patient    @relation(fields: [patientId], references: [id])
   doctor    Doctor     @relation(fields: [doctorId], references: [id])
+
+  @@map("license")
 }
