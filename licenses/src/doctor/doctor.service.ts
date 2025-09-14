@@ -13,7 +13,7 @@ export class DoctorService {
         name: createDoctorDto.name,
         lastname: createDoctorDto.lastName,
       }
-    })
+    });
   }
 
   async findAll() {
@@ -27,12 +27,12 @@ export class DoctorService {
     return doctor;
   }
 
-  update(id: string, updateDoctorDto: UpdateDoctorDto) {
+  async update(id: string, updateDoctorDto: UpdateDoctorDto) {
     const prev = await this.findOne(id);
     const data = {
       ...prev,
       ...updateDoctorDto,
-    }
+    };
     return await this.prismaService.doctor.update({
       where: { id },
       data,
