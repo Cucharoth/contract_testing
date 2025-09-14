@@ -13,7 +13,7 @@ export class PatientsService {
     async getPatientLicenses(patientId: string) {
         const licenseApiUrl =
             process.env.LICENSE_API_URL || "http://localhost:32001";
-        const currentUrl = `${licenseApiUrl}/licenses/${patientId}`;
+        const currentUrl = `${licenseApiUrl}/licenses/?patientId=${patientId}`;
 
         this.logger.log(`Fetching licenses from URL: ${currentUrl}`);
         try {
