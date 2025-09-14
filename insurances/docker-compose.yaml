@@ -11,8 +11,10 @@ services:
       DB_NAME: contract_testing
       JWT_SECRET: 'secreto'
       APP_ENV: staging
+      LICENSE_API_URL: ${LICENSE_API_URL}
+      PORT: ${PORT}
     ports:
-      - '32003:3000'
+      - '32003:32003'
     networks:
       - project-contract-testing-network
 
