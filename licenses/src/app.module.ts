@@ -1,10 +1,22 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { LicensesModule } from './licenses/licenses.module';
+import { HealthModule } from './health/health.module';
+import { PrismaModule } from 'prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/environment.config';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+      cache: true,
+      isGlobal: true,
+    }),
+    PrismaModule,
+    LicensesModule,
+    HealthModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
