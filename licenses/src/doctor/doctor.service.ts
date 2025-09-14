@@ -12,7 +12,7 @@ export class DoctorService {
       data: {
         name: createDoctorDto.name,
         lastname: createDoctorDto.lastName,
-      }
+      },
     });
   }
 
