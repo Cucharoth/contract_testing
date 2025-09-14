@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { LicensesService } from './licenses.service';
 import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
+import { LicenseQueryDto } from './dto/license-query.dto';
 
 @Controller('licenses')
 export class LicensesController {
@@ -22,13 +24,18 @@ export class LicensesController {
   }
 
   @Get()
-  findAll() {
-    return this.licensesService.findAll();
+  findAll(@Query() query: LicenseQueryDto) {
+    return this.licensesService.findAll(query);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.licensesService.findOne(id);
+  }
+
+  @Get(':id/verify')
+  verify(@Param('id', ParseUUIDPipe) id: string) {
+    return this.licensesService.verifyExistense(id);
   }
 
   @Patch(':id')

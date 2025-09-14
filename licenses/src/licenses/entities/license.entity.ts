@@ -4,6 +4,7 @@ export class LicenseEntity {
   constructor(
     public readonly id: string,
     public readonly patientId: string,
+    public readonly doctorId: string,
     public readonly diagnosis: string,
     public readonly startDate: Date,
     public readonly days: number,

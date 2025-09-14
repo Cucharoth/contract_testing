@@ -28,7 +28,7 @@ export class PatientController {
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.patientService.findOne(+id);
+    return this.patientService.findOne(id);
   }
 
   @Patch(':id')
@@ -36,11 +36,11 @@ export class PatientController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePatientDto: UpdatePatientDto,
   ) {
-    return this.patientService.update(+id, updatePatientDto);
+    return this.patientService.update(id, updatePatientDto);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.patientService.remove(+id);
+    return this.patientService.remove(id);
   }
 }

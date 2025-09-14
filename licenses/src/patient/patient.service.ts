@@ -21,14 +21,14 @@ export class PatientService {
     return await this.prismaService.patient.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const patient = await this.prismaService.patient.findFirst({
       where: { id: id.toString() },
     });
     return patient;
   }
 
-  async update(id: number, updatePatientDto: UpdatePatientDto) {
+  async update(id: string, updatePatientDto: UpdatePatientDto) {
     const prev = await this.findOne(id);
     const data = {
       ...prev,
@@ -40,7 +40,7 @@ export class PatientService {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const existing = await this.findOne(id);
     await this.prismaService.patient.delete({
       where: { id: id.toString() },

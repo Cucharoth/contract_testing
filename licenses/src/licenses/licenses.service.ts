@@ -3,7 +3,8 @@ import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { LicenseEntity } from './entities/license.entity';
-import { License } from '@prisma/client';
+import { License, Prisma } from '@prisma/client';
+import { LicenseQueryDto } from './dto/license-query.dto';
 
 @Injectable()
 export class LicensesService {
@@ -13,6 +14,7 @@ export class LicensesService {
     return new LicenseEntity(
       raw.id,
       raw.patientId,
+      raw.doctorId,
       raw.diagnosis,
       raw.startDate,
       raw.days,
@@ -36,8 +38,29 @@ export class LicensesService {
     return this.mapToDomain(license);
   }
 
-  async findAll(): Promise<LicenseEntity[]> {
-    const licenses = await this.prismaService.license.findMany();
+  async verifyExistense(id: string): Promise<{ valid: boolean }> {
+    const license = await this.prismaService.license.findFirst({
+      where: { id },
+    });
+    if (!license) {
+      return { valid: false };
+    }
+    return { valid: true };
+  }
+
+  async findAll(query: LicenseQueryDto): Promise<LicenseEntity[]> {
+    const where: Prisma.LicenseWhereInput = {};
+    if (query.doctorId) {
+      where.doctorId = query.doctorId;
+    }
+    if (query.patientId) {
+      where.patientId = query.patientId;
+    }
+
+    const licenses = await this.prismaService.license.findMany({
+      where: where,
+      orderBy: { createdAt: 'desc' },
+    });
     return licenses.map((license) => this.mapToDomain(license));
   }
 
