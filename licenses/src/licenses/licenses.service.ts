@@ -39,7 +39,6 @@ export class LicensesService {
   async findAll(): Promise<LicenseEntity[]> {
     const licenses = await this.prismaService.license.findMany();
     return licenses.map((license) => this.mapToDomain(license));
-
   }
 
   async findOne(id: string): Promise<LicenseEntity> {
@@ -55,7 +54,7 @@ export class LicensesService {
     const data = {
       ...license,
       ...updateLicenseDto,
-    }
+    };
     const updatedLicense = await this.prismaService.license.update({
       where: { id },
       data: {
