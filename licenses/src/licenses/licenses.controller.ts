@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { LicensesService } from './licenses.service';
 import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
@@ -18,17 +27,20 @@ export class LicensesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.licensesService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.licensesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLicenseDto: UpdateLicenseDto) {
-    return this.licensesService.update(+id, updateLicenseDto);
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateLicenseDto: UpdateLicenseDto,
+  ) {
+    return this.licensesService.update(id, updateLicenseDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.licensesService.remove(+id);
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.licensesService.remove(id);
   }
 }
