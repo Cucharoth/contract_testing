@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { DoctorEntity } from './entities/doctor.entity';
 
 @Injectable()
 export class DoctorService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createDoctorDto: CreateDoctorDto) {
+  async create(createDoctorDto: CreateDoctorDto): Promise<DoctorEntity> {
     return await this.prismaService.doctor.create({
       data: {
         name: createDoctorDto.name,
@@ -16,18 +17,24 @@ export class DoctorService {
     });
   }
 
-  async findAll() {
+  async findAll(): Promise<DoctorEntity[]> {
     return await this.prismaService.doctor.findMany();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<DoctorEntity> {
     const doctor = await this.prismaService.doctor.findFirst({
       where: { id },
     });
+    if (!doctor) {
+      throw new NotFoundException(`Doctor with id ${id} not found`);
+    }
     return doctor;
   }
 
-  async update(id: string, updateDoctorDto: UpdateDoctorDto) {
+  async update(
+    id: string,
+    updateDoctorDto: UpdateDoctorDto,
+  ): Promise<DoctorEntity> {
     const prev = await this.findOne(id);
     const data = {
       ...prev,
@@ -39,7 +46,7 @@ export class DoctorService {
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<DoctorEntity> {
     const existing = await this.findOne(id);
     await this.prismaService.doctor.delete({
       where: { id },
