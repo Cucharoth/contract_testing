@@ -1,5 +1,5 @@
 services:
-  backend-contract-testing:
+  backend.patients.contract_testing.local:
     hostname: backend.patients.contract_testing.local
     container_name: backend.patients.contract_testing.local
     build:

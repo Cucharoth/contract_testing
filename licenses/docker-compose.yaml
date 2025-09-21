@@ -23,7 +23,7 @@ services:
     networks:
       - project-contract-testing-network
 
-  backend-contract-testing:
+  backend.licenses.contract_testing.local:
     hostname: backend.licenses.contract_testing.local
     container_name: backend.licenses.contract_testing.local
     build:
