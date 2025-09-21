@@ -1,12 +1,11 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  ParseUUIDPipe,
+  Get,
+  Param,
+  Patch,
+  Post,
   Query,
 } from '@nestjs/common';
 import { LicensesService } from './licenses.service';
@@ -19,35 +18,40 @@ export class LicensesController {
   constructor(private readonly licensesService: LicensesService) {}
 
   @Post()
-  create(@Body() createLicenseDto: CreateLicenseDto) {
-    return this.licensesService.create(createLicenseDto);
+  async create(@Body() createLicenseDto: CreateLicenseDto) {
+    const license = await this.licensesService.create(createLicenseDto);
+    return this.licensesService.toResponse(license);
   }
 
   @Get()
-  findAll(@Query() query: LicenseQueryDto) {
-    return this.licensesService.findAll(query);
+  async findAll(@Query() query: LicenseQueryDto) {
+    const licenses = await this.licensesService.findAll(query);
+    return this.licensesService.toResponses(licenses);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.licensesService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const license = await this.licensesService.findOne(id);
+    return this.licensesService.toResponse(license);
   }
 
   @Get(':id/verify')
-  verify(@Param('id', ParseUUIDPipe) id: string) {
+  verify(@Param('id') id: string) {
     return this.licensesService.verifyExistense(id);
   }
 
   @Patch(':id')
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
+  async update(
+    @Param('id') id: string,
     @Body() updateLicenseDto: UpdateLicenseDto,
   ) {
-    return this.licensesService.update(id, updateLicenseDto);
+    const license = await this.licensesService.update(id, updateLicenseDto);
+    return this.licensesService.toResponse(license);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.licensesService.remove(id);
+  async remove(@Param('id') id: string) {
+    const license = await this.licensesService.remove(id);
+    return this.licensesService.toResponse(license);
   }
 }
