@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { LicenseEntity } from './entities/license.entity';
 import { License, Prisma } from '@prisma/client';
 import { LicenseQueryDto } from './dto/license-query.dto';
