@@ -1,6 +1,8 @@
 export class PatientLicensesNotFoundError extends Error {
     constructor(
-        public readonly details: Record<string, unknown> = { error: "NOT_FOUND" },
+        public readonly details: Record<string, unknown> = {
+            error: "NOT_FOUND",
+        },
     ) {
         super("PATIENT_LICENSES_NOT_FOUND");
     }
