@@ -1,0 +1,13 @@
+meta {
+  name: List Licenses By Patient
+  type: http
+  seq: 1
+}
+
+request {
+  method: GET
+  url: {{licenses_base_url}}/licenses?patientId={{patient_id}}
+  headers {
+    Accept: application/json
+  }
+}

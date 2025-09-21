@@ -1,0 +1,13 @@
+meta {
+  name: Get License By Id
+  type: http
+  seq: 1
+}
+
+request {
+  method: GET
+  url: {{licenses_base_url}}/licenses/{{license_id}}
+  headers {
+    Accept: application/json
+  }
+}

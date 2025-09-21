@@ -1,0 +1,21 @@
+meta {
+  name: Update License
+  type: http
+  seq: 1
+}
+
+request {
+  method: PATCH
+  url: {{licenses_base_url}}/licenses/{{license_id}}
+  headers {
+    Content-Type: application/json
+    Accept: application/json
+  }
+  body: json
+  body_json: '''
+  {
+    "diagnosis": "Updated diagnosis",
+    "status": "revoked"
+  }
+  '''
+}

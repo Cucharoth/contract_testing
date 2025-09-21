@@ -1,0 +1,13 @@
+meta {
+  name: Verify License
+  type: http
+  seq: 1
+}
+
+request {
+  method: GET
+  url: {{licenses_base_url}}/licenses/{{license_id}}/verify
+  headers {
+    Accept: application/json
+  }
+}
