@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
 import axios from "axios";
 
 @Injectable()
@@ -22,12 +22,15 @@ export class InsuranceService {
             this.logger.warn(
                 `Failed to verify license with folio ${folio}. Status code: ${response.status}`,
             );
-            return new NotFoundException("License not found");
+            throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
         } catch (error) {
             this.logger.error(
                 `Error verifying license with folio ${folio}: ${error.message}`,
             );
-            throw new NotFoundException("License not found");
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -49,12 +52,15 @@ export class InsuranceService {
             this.logger.warn(
                 `Failed to fetch licenses for patient ID ${patientId}. Status code: ${response.status}`,
             );
-            return new NotFoundException("No licenses found for this patient");
+            throw new HttpException({ error: "NOT_FOUND" }, HttpStatus.NOT_FOUND);
         } catch (error) {
             this.logger.error(
                 `Error fetching licenses for patient ID ${patientId}: ${error.message}`,
             );
-            throw new NotFoundException("No licenses found for this patient");
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            throw new HttpException({ error: "NOT_FOUND" }, HttpStatus.NOT_FOUND);
         }
     }
 }
