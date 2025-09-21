@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { PatientsService } from './patient.service';
 
 @Controller('patient')
@@ -7,7 +7,7 @@ export class PatientsController {
     }
 
     @Get(":patientId/licenses")
-    getPatientLicenses(@Param('patientId', ParseUUIDPipe) patientId: string) {
+    getPatientLicenses(@Param('patientId') patientId: string) {
         return this.patientsService.getPatientLicenses(patientId);
     }
 
