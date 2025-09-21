@@ -8,7 +8,9 @@ export class LicenseVerificationFailureError extends Error {
 
 export class InsurancePatientLicensesNotFoundError extends Error {
     constructor(
-        public readonly details: Record<string, unknown> = { error: "NOT_FOUND" },
+        public readonly details: Record<string, unknown> = {
+            error: "NOT_FOUND",
+        },
     ) {
         super("INSURANCE_PATIENT_LICENSES_NOT_FOUND");
     }

@@ -4,31 +4,29 @@ import {
     NotFoundException,
     Param,
     ServiceUnavailableException,
-} from '@nestjs/common';
-import { InsuranceService } from './insurance.service';
+} from "@nestjs/common";
+import { InsuranceService } from "./insurance.service";
 import {
     InsurancePatientLicensesNotFoundError,
     LicenseProviderLookupError,
     LicenseVerificationFailureError,
-} from './errors/insurance.errors';
+} from "./errors/insurance.errors";
 
-
-@Controller('insurer')
+@Controller("insurer")
 export class InsuranceController {
-    constructor(private readonly insuranceService: InsuranceService) {
-    }
+    constructor(private readonly insuranceService: InsuranceService) {}
 
     @Get("licenses/:folio/verify")
-    async verifyLicense(@Param('folio') folio: string) {
+    async verifyLicense(@Param("folio") folio: string) {
         try {
             return await this.insuranceService.verifyLicense(folio);
         } catch (error) {
             return this.handleError(error);
         }
     }
-    
+
     @Get("patients/:patientId/licenses")
-    async getPatientLicenses(@Param('patientId') patientId: string) {
+    async getPatientLicenses(@Param("patientId") patientId: string) {
         try {
             return await this.insuranceService.getPatientLicenses(patientId);
         } catch (error) {
@@ -48,5 +46,4 @@ export class InsuranceController {
         }
         throw error;
     }
-
 }
