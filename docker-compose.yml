@@ -1,0 +1,13 @@
+version: '3.8'
+
+# Compose spec extension using "include" (supported by Docker Compose V2)
+include:
+  - licenses/docker-compose.yaml
+  - patients/docker-compose.yaml
+  - insurances/docker-compose.yaml
+
+services: {}
+
+networks:
+  project-contract-testing-network:
+    external: true
