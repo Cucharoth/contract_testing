@@ -1,10 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
 import { PrismaService } from 'prisma/prisma.service';
 import { LicenseEntity } from './entities/license.entity';
 import { License, Prisma } from '@prisma/client';
 import { LicenseQueryDto } from './dto/license-query.dto';
+import { LicenseStatusEnum } from './enum/license-status.enum';
+import {
+  InvalidDaysError,
+  LicenseInvalidError,
+  LicenseNotFoundError,
+} from './errors/license.errors';
 
 @Injectable()
 export class LicensesService {
@@ -18,13 +24,17 @@ export class LicensesService {
       raw.diagnosis,
       raw.startDate,
       raw.days,
-      raw.status as unknown as any,
+      raw.status as unknown as LicenseStatusEnum,
       raw.createdAt,
       raw.updatedAt,
     );
   }
 
   async create(createLicenseDto: CreateLicenseDto) {
+    if (createLicenseDto.days <= 0) {
+      throw new InvalidDaysError();
+    }
+
     const license = await this.prismaService.license.create({
       data: {
         patientId: createLicenseDto.patientId,
@@ -32,7 +42,7 @@ export class LicensesService {
         diagnosis: createLicenseDto.diagnosis,
         startDate: createLicenseDto.startDate,
         days: createLicenseDto.days,
-        status: createLicenseDto.status,
+        status: LicenseStatusEnum.ISSUED,
       },
     });
     return this.mapToDomain(license);
@@ -42,9 +52,16 @@ export class LicensesService {
     const license = await this.prismaService.license.findFirst({
       where: { id },
     });
-    if (!license) {
-      return { valid: false };
+
+    const isValid =
+      license !== null &&
+      license.status === LicenseStatusEnum.ISSUED &&
+      license.days > 0;
+
+    if (!isValid) {
+      throw new LicenseInvalidError();
     }
+
     return { valid: true };
   }
 
@@ -68,7 +85,9 @@ export class LicensesService {
     const license = await this.prismaService.license.findFirst({
       where: { id },
     });
-    if (!license) throw new NotFoundException('License not found');
+    if (!license) {
+      throw new LicenseNotFoundError();
+    }
     return this.mapToDomain(license);
   }
 
@@ -78,6 +97,9 @@ export class LicensesService {
       ...license,
       ...updateLicenseDto,
     };
+    if (data.days <= 0) {
+      throw new InvalidDaysError();
+    }
     const updatedLicense = await this.prismaService.license.update({
       where: { id },
       data: {
@@ -96,5 +118,23 @@ export class LicensesService {
     const license = await this.findOne(id);
     await this.prismaService.license.delete({ where: { id } });
     return license;
+  }
+
+  toResponse(raw: LicenseEntity) {
+    return {
+      folio: raw.id,
+      patientId: raw.patientId,
+      doctorId: raw.doctorId,
+      diagnosis: raw.diagnosis,
+      startDate: raw.startDate,
+      days: raw.days,
+      status: raw.status,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt,
+    };
+  }
+
+  toResponses(raw: LicenseEntity[]) {
+    return raw.map((item) => this.toResponse(item));
   }
 }
