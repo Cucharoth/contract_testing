@@ -1,10 +1,9 @@
-import {
-    HttpCode,
-    Injectable,
-    Logger,
-    NotFoundException,
-} from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import axios from "axios";
+import {
+    PatientLicensesLookupError,
+    PatientLicensesNotFoundError,
+} from "./errors/patient.errors";
 
 @Injectable()
 export class PatientsService {
@@ -27,12 +26,15 @@ export class PatientsService {
             this.logger.warn(
                 `Failed to fetch licenses for patient ${patientId}. Status code: ${response.status}`,
             );
-            return new NotFoundException("No licenses found for this patient");
+            throw new PatientLicensesNotFoundError();
         } catch (error) {
             this.logger.error(
                 `Error fetching licenses for patient ${patientId}: ${error.message}`,
             );
-            throw new NotFoundException("No licenses found for this patient");
+            if (error instanceof PatientLicensesNotFoundError) {
+                throw error;
+            }
+            throw new PatientLicensesLookupError();
         }
     }
 }
