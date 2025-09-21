@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { InsuranceService } from './insurance.service';
 
 
@@ -8,12 +8,12 @@ export class InsuranceController {
     }
 
     @Get("licenses/:folio/verify")
-    verifyLicense(@Param('folio', ParseUUIDPipe) folio: string) {
+    verifyLicense(@Param('folio') folio: string) {
         return this.insuranceService.verifyLicense(folio);
     }
     
     @Get("patients/:patientId/licenses")
-    getPatientLicenses(@Param('patientId', ParseUUIDPipe) patientId: string) {
+    getPatientLicenses(@Param('patientId') patientId: string) {
         return this.insuranceService.getPatientLicenses(patientId);
     }
 
