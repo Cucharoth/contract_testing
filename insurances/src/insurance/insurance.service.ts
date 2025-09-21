@@ -1,5 +1,10 @@
-import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import axios from "axios";
+import {
+    InsurancePatientLicensesNotFoundError,
+    LicenseProviderLookupError,
+    LicenseVerificationFailureError,
+} from "./errors/insurance.errors";
 
 @Injectable()
 export class InsuranceService {
@@ -22,15 +27,15 @@ export class InsuranceService {
             this.logger.warn(
                 `Failed to verify license with folio ${folio}. Status code: ${response.status}`,
             );
-            throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
+            throw new LicenseVerificationFailureError();
         } catch (error) {
             this.logger.error(
                 `Error verifying license with folio ${folio}: ${error.message}`,
             );
-            if (error instanceof HttpException) {
+            if (error instanceof LicenseVerificationFailureError) {
                 throw error;
             }
-            throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
+            throw new LicenseProviderLookupError();
         }
     }
 
@@ -52,15 +57,15 @@ export class InsuranceService {
             this.logger.warn(
                 `Failed to fetch licenses for patient ID ${patientId}. Status code: ${response.status}`,
             );
-            throw new HttpException({ error: "NOT_FOUND" }, HttpStatus.NOT_FOUND);
+            throw new InsurancePatientLicensesNotFoundError();
         } catch (error) {
             this.logger.error(
                 `Error fetching licenses for patient ID ${patientId}: ${error.message}`,
             );
-            if (error instanceof HttpException) {
+            if (error instanceof InsurancePatientLicensesNotFoundError) {
                 throw error;
             }
-            throw new HttpException({ error: "NOT_FOUND" }, HttpStatus.NOT_FOUND);
+            throw new LicenseProviderLookupError();
         }
     }
 }

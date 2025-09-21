@@ -1,11 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsNotEmpty,
-  IsString,
-  IsUUID,
-  Min,
-} from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, IsUUID, Min } from 'class-validator';
 
 export class CreateLicenseDto {
   @IsUUID()
