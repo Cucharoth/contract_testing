@@ -1,12 +1,11 @@
+import { Type } from 'class-transformer';
 import {
   IsDate,
-  IsEnum,
   IsNotEmpty,
   IsString,
   IsUUID,
   Min,
 } from 'class-validator';
-import { LicenseStatusEnum } from '../enum/license-status.enum';
 
 export class CreateLicenseDto {
   @IsUUID()
@@ -19,13 +18,11 @@ export class CreateLicenseDto {
   diagnosis: string;
 
   @IsNotEmpty()
+  @Type(() => Date)
   @IsDate()
   startDate: Date;
 
   @IsNotEmpty()
   @Min(1)
   days: number;
-
-  @IsEnum(LicenseStatusEnum)
-  status: LicenseStatusEnum;
 }
