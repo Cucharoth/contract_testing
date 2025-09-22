@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateLicenseDto } from './dto/create-license.dto';
 import { UpdateLicenseDto } from './dto/update-license.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { FolioGeneratorService } from './folio-generator.service';
 import { LicenseEntity } from './entities/license.entity';
 import { License, Prisma } from '@prisma/client';
 import { LicenseQueryDto } from './dto/license-query.dto';
@@ -14,7 +15,10 @@ import {
 
 @Injectable()
 export class LicensesService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly folioGenerator: FolioGeneratorService,
+  ) {}
 
   private mapToDomain(raw: License) {
     return new LicenseEntity(
@@ -35,8 +39,10 @@ export class LicensesService {
       throw new InvalidDaysError();
     }
 
+    const id: string = await this.folioGenerator.next();
     const license = await this.prismaService.license.create({
       data: {
+        id,
         patientId: createLicenseDto.patientId,
         doctorId: createLicenseDto.doctorId,
         diagnosis: createLicenseDto.diagnosis,
