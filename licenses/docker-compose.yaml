@@ -14,7 +14,7 @@ services:
       - PGTZ=America/Santiago
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - DATABASE_URL=${DATABASE_URL}"
+      - DATABASE_URL=${DATABASE_URL}
     ports:
       - '31000:5432'
     volumes:
