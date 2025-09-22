@@ -10,4 +10,5 @@ async function bootstrap() {
 
     logger.log(`Application listening on port ${process.env.PORT ?? 3000}`);
 }
-bootstrap();
+
+void bootstrap();
