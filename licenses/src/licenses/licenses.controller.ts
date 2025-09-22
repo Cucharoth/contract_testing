@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  NotFoundException,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -55,10 +55,16 @@ export class LicensesController {
   }
 
   @Get(':id/verify')
-  verify(@Param('id') id: string) {
+  async verify(@Param('id') id: string) {
     try {
-      return this.licensesService.verifyExistense(id);
+      return await this.licensesService.verifyExistense(id);
     } catch (error) {
+      if (
+        error instanceof LicenseInvalidError ||
+        error instanceof LicenseNotFoundError
+      ) {
+        throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
+      }
       return this.handleError(error);
     }
   }
@@ -86,16 +92,22 @@ export class LicensesController {
     }
   }
 
-  private handleError(error: any): never {
+  private handleError(error: unknown): never {
     if (error instanceof InvalidDaysError) {
-      throw new BadRequestException(error.details);
+      throw new HttpException(
+        { error: 'INVALID_DAYS' },
+        HttpStatus.BAD_REQUEST,
+      );
     }
     if (error instanceof LicenseNotFoundError) {
-      throw new NotFoundException(error.details);
+      throw new HttpException({ error: 'NOT_FOUND' }, HttpStatus.NOT_FOUND);
     }
     if (error instanceof LicenseInvalidError) {
-      throw new NotFoundException(error.details);
+      throw new HttpException({ valid: false }, HttpStatus.NOT_FOUND);
     }
-    throw error;
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(String(error));
   }
 }
