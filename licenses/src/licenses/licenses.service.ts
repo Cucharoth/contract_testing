@@ -53,12 +53,14 @@ export class LicensesService {
       where: { id },
     });
 
-    const isValid =
-      license !== null &&
-      license.status === LicenseStatusEnum.ISSUED &&
-      license.days > 0;
+    if (!license) {
+      throw new LicenseNotFoundError();
+    }
 
-    if (!isValid) {
+    const isIssued =
+      license.status === LicenseStatusEnum.ISSUED && license.days > 0;
+
+    if (!isIssued) {
       throw new LicenseInvalidError();
     }
 
