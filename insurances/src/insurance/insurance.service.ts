@@ -1,7 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import axios, { AxiosResponse } from "axios";
 import {
-    InsurancePatientLicensesNotFoundError,
     LicenseProviderLookupError,
     LicenseVerificationFailureError,
 } from "./errors/insurance.errors";
@@ -19,23 +18,34 @@ export class InsuranceService {
             const currentUrl = `${licenseApiUrl}/licenses/${folio}/verify`;
             const response: AxiosResponse<unknown> =
                 await axios.get(currentUrl);
-            if (response.status === 200) {
-                this.logger.log(
-                    `Successfully verified license with folio ${folio}`,
-                );
-                return response.data;
-            }
-            this.logger.warn(
-                `Failed to verify license with folio ${folio}. Status code: ${response.status}`,
+
+            this.logger.log(
+                `Successfully verified license with folio ${folio}`,
             );
-            throw new LicenseVerificationFailureError();
+
+            return response.data;
         } catch (error: unknown) {
-            this.logger.error(
-                `Error verifying license with folio ${folio}: ${error instanceof Error ? error.message : "Unknown error"}`,
-            );
-            if (error instanceof LicenseVerificationFailureError) {
-                throw error;
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
+                if (status === 404) {
+                    this.logger.warn(
+                        `License ${folio} missing during verification; propagating provider response`,
+                    );
+
+                    const rawData: unknown = error.response?.data;
+                    const details: Record<string, unknown> = rawData
+                        ? (rawData as Record<string, unknown>)
+                        : { valid: false };
+
+                    throw new LicenseVerificationFailureError(details);
+                }
+
+                this.logger.error(
+                    `Upstream error verifying license ${folio}: ${error.message}`,
+                );
             }
+
             throw new LicenseProviderLookupError();
         }
     }
@@ -50,23 +60,32 @@ export class InsuranceService {
             const currentUrl = `${licenseApiUrl}/licenses/?patientId=${patientId}`;
             const response: AxiosResponse<unknown> =
                 await axios.get(currentUrl);
-            if (response.status === 200) {
-                this.logger.log(
-                    `Successfully fetched licenses for patient ID ${patientId}`,
-                );
-                return response.data;
-            }
-            this.logger.warn(
-                `Failed to fetch licenses for patient ID ${patientId}. Status code: ${response.status}`,
+
+            this.logger.log(
+                `Successfully fetched licenses for patient ID ${patientId}`,
             );
-            throw new InsurancePatientLicensesNotFoundError();
+
+            return response.data;
         } catch (error: unknown) {
-            this.logger.error(
-                `Error fetching licenses for patient ID ${patientId}: ${error instanceof Error ? error.message : "Unknown error"}`,
-            );
-            if (error instanceof InsurancePatientLicensesNotFoundError) {
-                throw error;
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
+                if (status === 404) {
+                    this.logger.warn(
+                        `No licenses found for patient ID ${patientId}; returning empty array`,
+                    );
+                    return [];
+                }
+
+                this.logger.error(
+                    `Upstream error fetching licenses for patient ID ${patientId}: ${error.message}`,
+                );
+            } else if (error instanceof Error) {
+                this.logger.error(
+                    `Unexpected error fetching licenses for patient ID ${patientId}: ${error.message}`,
+                );
             }
+
             throw new LicenseProviderLookupError();
         }
     }
