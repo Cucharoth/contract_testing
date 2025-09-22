@@ -1,0 +1,136 @@
+{
+  "consumer": {
+    "name": "Medico App"
+  },
+  "interactions": [
+    {
+      "description": "a valid license creation request",
+      "providerStates": [
+        {
+          "name": "issued license days>0 is creatable"
+        }
+      ],
+      "request": {
+        "body": {
+          "days": 7,
+          "diagnosis": "Lumbago agudo",
+          "doctorId": "DOC-POST-OK",
+          "patientId": "PAT-POST-OK",
+          "startDate": "2024-03-01"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/licenses"
+      },
+      "response": {
+        "body": {
+          "createdAt": "2024-03-01T00:00:00.000Z",
+          "days": 7,
+          "diagnosis": "Lumbago agudo",
+          "doctorId": "DOC-POST-OK",
+          "folio": "L-2000",
+          "patientId": "PAT-POST-OK",
+          "startDate": "2024-03-01T00:00:00.000Z",
+          "status": "issued",
+          "updatedAt": "2024-03-01T00:00:00.000Z"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.folio": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.startDate": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.updatedAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 201
+      }
+    },
+    {
+      "description": "an invalid license creation request with days equal zero",
+      "providerStates": [
+        {
+          "name": "issued license days>0 is creatable"
+        }
+      ],
+      "request": {
+        "body": {
+          "days": 0,
+          "diagnosis": "Lumbago agudo",
+          "doctorId": "DOC-POST-OK",
+          "patientId": "PAT-POST-OK",
+          "startDate": "2024-03-01"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/licenses"
+      },
+      "response": {
+        "body": {
+          "error": "INVALID_DAYS"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "status": 400
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "15.0.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.28",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "Licenses Service"
+  }
+}

@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "pact:verify": "node ./scripts/verify-pacts.cjs",
     "seed": "npx tsx ./scripts/seed.ts"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@pact-foundation/pact": "^15.0.1",
     "@prisma/adapter-pg": "^6.16.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
