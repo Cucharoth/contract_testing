@@ -1,10 +1,13 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString, IsUUID, Min } from 'class-validator';
+import { IsDate, IsNotEmpty, IsString, Min } from 'class-validator';
 
 export class CreateLicenseDto {
-  @IsUUID()
+  @IsString()
+  @IsNotEmpty()
   patientId: string;
-  @IsUUID()
+
+  @IsString()
+  @IsNotEmpty()
   doctorId: string;
 
   @IsString()
