@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsDate, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateLicenseDto {
   @IsString()
@@ -20,6 +20,7 @@ export class CreateLicenseDto {
   startDate: Date;
 
   @IsNotEmpty()
-  @Min(1)
+  @Type(() => Number)
+  @IsInt()
   days: number;
 }
