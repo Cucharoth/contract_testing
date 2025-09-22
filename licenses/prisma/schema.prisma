@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Patient {
-  id        String    @id @default(uuid())
+  id        String    @id
   name      String
   lastname  String
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
@@ -26,7 +26,7 @@ model Patient {
 }
 
 model Doctor {
-  id        String    @id @default(uuid())
+  id        String    @id
   name      String
   lastname  String
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
@@ -45,7 +45,7 @@ enum LicenseStatus {
 }
 
 model License {
-  id        String    @id @default(uuid())
+  id        String    @id
   patientId String    @map("patient_id")
   doctorId  String    @map("doctor_id")
   diagnosis String
