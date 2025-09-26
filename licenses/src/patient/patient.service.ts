@@ -11,6 +11,7 @@ export class PatientService {
   async create(createPatientDto: CreatePatientDto) {
     return await this.prismaService.patient.create({
       data: {
+        id: "<unique_id>",
         name: createPatientDto.name,
         lastname: createPatientDto.lastName,
       },

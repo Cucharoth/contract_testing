@@ -11,6 +11,7 @@ export class DoctorService {
   async create(createDoctorDto: CreateDoctorDto): Promise<DoctorEntity> {
     return await this.prismaService.doctor.create({
       data: {
+        id: "<unique_id>",
         name: createDoctorDto.name,
         lastname: createDoctorDto.lastName,
       },
