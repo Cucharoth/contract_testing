@@ -1,0 +1,13 @@
+meta {
+  name: Delete License
+  type: http
+  seq: 1
+}
+
+request {
+  method: DELETE
+  url: {{licenses_base_url}}/licenses/{{license_id}}
+  headers {
+    Accept: application/json
+  }
+}

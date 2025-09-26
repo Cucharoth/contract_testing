@@ -1,0 +1,27 @@
+services:
+  backend.insurances.contract_testing.local:
+    hostname: backend.insurances.contract_testing.local
+    container_name: backend.insurances.contract_testing.local
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    environment:
+      DB_HOST: db.contract_testing.local
+      DB_PORT: 5432
+      DB_NAME: contract_testing
+      JWT_SECRET: 'secreto'
+      APP_ENV: staging
+      LICENSE_API_URL: ${LICENSE_API_URL}
+      PORT: ${PORT}
+    ports:
+      - '32003:32003'
+    networks:
+      - project-contract-testing-network
+
+volumes:
+  db-contract-testing:
+    driver: local
+
+networks:
+  project-contract-testing-network:
+    external: true

@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  driverAdapters = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id        String    @id
+  name      String
+  lastname  String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  licenses  License[]
+
+  @@map("patient")
+}
+
+model Doctor {
+  id        String    @id
+  name      String
+  lastname  String
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6) 
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  licenses  License[]
+
+  @@map("doctor")
+}
+
+enum LicenseStatus {
+  issued
+  revoked
+  expired
+
+  @@map("license_status")
+}
+
+model License {
+  id        String    @id
+  patientId String    @map("patient_id")
+  doctorId  String    @map("doctor_id")
+  diagnosis String
+  startDate DateTime  @map("start_date")
+  days      Int
+  status    LicenseStatus @default(issued)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)  
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+
+  patient   Patient    @relation(fields: [patientId], references: [id])
+  doctor    Doctor     @relation(fields: [doctorId], references: [id])
+
+  @@map("license")
+}

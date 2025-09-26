@@ -1,0 +1,25 @@
+meta {
+  name: Create License
+  type: http
+  seq: 1
+}
+
+request {
+  method: POST
+  url: {{licenses_base_url}}/licenses
+  headers {
+    Content-Type: application/json
+    Accept: application/json
+  }
+  body: json
+  body_json: '''
+  {
+    "patientId": "{{patient_id}}",
+    "doctorId": "{{doctor_id}}",
+    "diagnosis": "Lower back pain",
+    "startDate": "2024-01-01",
+    "days": 7,
+    "status": "issued"
+  }
+  '''
+}

@@ -1,0 +1,12 @@
+{
+  "name": "consumer-tests",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node ./run-pact-tests.mjs"
+  },
+  "dependencies": {
+    "@pact-foundation/pact": "^15.0.1"
+  }
+}
