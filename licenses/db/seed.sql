@@ -14,7 +14,7 @@ INSERT INTO patient (id, name, lastname) VALUES
 ('66666666-6', 'Frank', 'Garcia'),
 ('77777777-7', 'Grace', 'Martinez'),
 ('88888888-8', 'Hank', 'Anderson'),
-('9999999-9', 'Ivy', 'Lopez'),
+('9999999-9', 'Ivy', 'Lopez');
 
 -- Minimal doctor to issue licenses in tests / provider states
 INSERT INTO doctor (id, name, lastname) VALUES

@@ -3,7 +3,7 @@ docker network inspect project-contract-testing-network >nul 2>&1 || docker netw
 
 REM Stop and remove containers/images/volumes for licenses, then start
 pushd .\licenses >nul 2>&1
-docker compose down --rmi local || echo "licenses: nothing to stop"
+docker compose down --rmi local -v || echo "licenses: nothing to stop"
 docker compose up --build -d
 popd >nul 2>&1
 
