@@ -1,0 +1,14 @@
+services:
+  consumer-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: contract-testing-consumer-tests:latest
+    volumes:
+      - ../pacts:/usr/src/consumer-tests/../pacts
+    networks:
+      - project-contract-testing-network
+
+networks:
+  project-contract-testing-network:
+    external: true

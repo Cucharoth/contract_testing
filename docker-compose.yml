@@ -1,12 +1,17 @@
-version: '3.8'
-
 # Compose spec extension using "include" (supported by Docker Compose V2)
 include:
   - licenses/docker-compose.yaml
   - patients/docker-compose.yaml
   - insurances/docker-compose.yaml
+  - consumer-tests/docker-compose.yaml
 
-services: {}
+services:
+  verify-licenses:
+    image: curlimages/curl:8.1.2
+    command: ["curl", "http://backend.insurances.contract_testing.local:32003/insurer/licenses/L-1002/verify"]
+      
+    networks:
+      - project-contract-testing-network
 
 networks:
   project-contract-testing-network:
