@@ -1,0 +1,162 @@
+{
+  "consumer": {
+    "name": "Sistema Administracion Hospitalaria"
+  },
+  "interactions": [
+    {
+      "description": "a request to get license details by folio",
+      "providerStates": [
+        {
+          "name": "patient 11111111-1 has issued license folio L-1001"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/licenses/L-1001"
+      },
+      "response": {
+        "body": {
+          "createdAt": "2024-01-01T00:00:00.000Z",
+          "days": 7,
+          "diagnosis": "Rest and hydration",
+          "doctorId": "DOC-1001",
+          "folio": "L-1001",
+          "patientId": "11111111-1",
+          "startDate": "2024-01-01T00:00:00.000Z",
+          "status": "issued",
+          "updatedAt": "2024-01-01T00:00:00.000Z"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.createdAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.days": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.diagnosis": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.doctorId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.folio": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.patientId": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.startDate": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.status": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.updatedAt": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "a request to get non-existent license details",
+      "providerStates": [
+        {
+          "name": "license L-404 does not exist"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Accept": "application/json"
+        },
+        "method": "GET",
+        "path": "/licenses/L-404"
+      },
+      "response": {
+        "body": {
+          "error": "NOT_FOUND"
+        },
+        "headers": {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        "status": 404
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "15.0.1"
+    },
+    "pactRust": {
+      "ffi": "0.4.28",
+      "models": "1.3.5"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "Licenses Service"
+  }
+}

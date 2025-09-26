@@ -1,0 +1,30 @@
+meta {
+  name: Get License by Folio - Not Found
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{base_url}}/licenses/L-404
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("Status code is 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+  
+  test("Response has error message", function() {
+    expect(res.getBody()).to.have.property('error');
+    expect(res.getBody().error).to.equal('NOT_FOUND');
+  });
+  
+  test("Response content type is JSON", function() {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+}

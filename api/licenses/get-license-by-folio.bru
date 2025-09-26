@@ -1,0 +1,41 @@
+meta {
+  name: Get License by Folio
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/licenses/L-1001
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("Status code is 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response has license details", function() {
+    expect(res.getBody()).to.have.property('folio');
+    expect(res.getBody()).to.have.property('patientId');
+    expect(res.getBody()).to.have.property('doctorId');
+    expect(res.getBody()).to.have.property('diagnosis');
+    expect(res.getBody()).to.have.property('days');
+    expect(res.getBody()).to.have.property('status');
+    expect(res.getBody()).to.have.property('startDate');
+    expect(res.getBody()).to.have.property('createdAt');
+    expect(res.getBody()).to.have.property('updatedAt');
+  });
+  
+  test("License folio matches request", function() {
+    expect(res.getBody().folio).to.equal('L-1001');
+  });
+  
+  test("Response content type is JSON", function() {
+    expect(res.getHeader('content-type')).to.include('application/json');
+  });
+}
