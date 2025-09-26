@@ -3,6 +3,13 @@ Este un ejemplo básico de configuración para realizar Contract Testing.
 
 ---
 
+## Integrantes:
+- Eduardo Arévalo
+- Cedric Kirmayr
+- David Ibáñez
+- Nicolas Paila
+
+
 ## Requerimientos:
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
